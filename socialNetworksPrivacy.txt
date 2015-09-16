@@ -1,0 +1,32 @@
+A method for increasing privacy in social networks
+
+1. introduction:
+social networks (hereinafter called SNs) are a great communication tool especially for people who have friends distributed over various parts of the world. However as every tool social networks bring also some dangers and concerns. One of them is users' privacy. There were a lot of cases of abuse of one's privacy either by social network owner/operator (hereinafter called SNO) or by other users.
+
+
+2. general idea:
+a data stored in or transferred via a social network (SN) will be encrypted before reaching SN's server (hereinafter called SNServer) and only intended recipients will be able to decrypt it after fetching it to their devices. This process should be as transparent to users as possible. The method described below will be using asymmetric cryptography, public key infrastructure and symmetric ciphers for this purpose.
+
+
+3. data exchange mechanism
+First, data will be encrypted on sending user's device by his user agent before sending via network to SNServer. While on SNServer it will remain encrypted so that neither SNO nor other third party entity that is intended recipient of the data will be able to read it. When intended recipient is interested in reading the data he will first fetch an encrypted version from SNServer to his devices and then decrypt it with his user-agent (typically a web browser).
+
+Each user that wishes to send or receive encrypted content will have to maintain a keyring on his device that stores his public and private key pair. This keyring will be accessed by user-agent (in case of web browser it will be typically done by a browser plugin).
+
+The exact mechanism will look a bit different depending on communication type:
+
+3.1 user to user messages
+secure encrypted messaging is possible only between users who exchanged and verified their public keys. The mechanism works just as PGP: after sender creates an unencrypted message his user-agent encrypts its content with receiver's public key and sends it using specific format that will allow receiver's user-agent automatically detect that this is an encrypted message and automatically decrypt it using receiver's private key before showing it to the receiver.
+
+3.2 publishing to a user group or friend subgroup
+each user group (a set users that is publicly known to exist and to which any user may ask to be added by a member of the given group who has such privilege) or friend subgroup (a subset of user's connections to which only the given user my arbitrarily add or remove other users) that is secured with this mechanism has an associated group-key: a symmetric cipher key that is used to encrypt and decrypt all data published to the group. Each member of the group must have this key in his keyring.
+
+4. key exchange mechanism
+
+4.1 user public keys.
+SNServer will basically act as a public keyserver: user-agent of any user will be able to download a public key of any other user at any time. After downloading some other user's key it will be marked as untrusted in the keyring. Users should verify authenticity of downloaded keys with their owners by communication means other than SN (such as email) to avoid SN performing man-in-the-middle attacks. Each time a user uses untrusted public key of another user, his user-agent should display a warning.
+User-agent should provide a user interface to mark key as trusted.
+
+4.2 group keys
+Once a privileged user (hereinafter called admin) decides to add another user (making him a member) to a given group and he has member's public key already in his keyring marked as trusted then admin's user-agent will automatically send the group-key encrypted with member's public key using SN messaging mechanism to member. The message will have a special format that will allow member's user-agent to recognize that this is a group-key and automatically add to member's keyring. If admin hasn't marked member's public key
+as trusted yet then a warning message will be displayed to admin.
